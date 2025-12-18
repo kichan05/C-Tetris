@@ -8,5 +8,6 @@
 void chomp(char *s);
 
 void waiting(void);
+char* fs(char *fmp, ...);
 
 #endif //C_UTIL_H

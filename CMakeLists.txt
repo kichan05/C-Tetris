@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.27)
-project(C_Console_Template C)
+project(C_Tetris C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(C_Console_Template main.c
+add_executable(C_Tetris main.c
         common/color.h
-        common/util.c
-        ui.h
         common/color.c
-        ui.c)
+        common/util.c
+        common/util.h
+        common/key.c
+        common/key.h
+        ui.h
+        ui.c
+)
