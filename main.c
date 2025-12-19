@@ -58,12 +58,15 @@ int main() {
 
     COORD position = {0, 0};
     int block_rotate = 0;
-    int blockType = 1;
+    int blockType = 0;
 
     while (1) {
         clearScreen();
 
         Block b = BLOCK_TEMPLATE[blockType][block_rotate];
+
+        writeScreen(0, MAP_HEIGHT + 1, fs("X : %d   \tY : %d", position.X, position.Y));
+        writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, block_rotate));
 
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
@@ -73,7 +76,7 @@ int main() {
 
         for (int y = 0; y < b.height; y++) {
             for (int x = 0; x < b.width; x++) {
-                if (b.shape[y][x] == 1) {
+                if (b.shape[y][x]) {
                     writeScreen(position.X + x, position.Y + y, COLOR_MAGENTA BLOCK COLOR_RESET);
                 }
             }
@@ -121,7 +124,7 @@ int main() {
         }
 
         flipScreen();
-        Sleep(50);
+        Sleep(60);
     }
     return 0;
 }
