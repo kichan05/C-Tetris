@@ -7,7 +7,7 @@
 #include "common/util.h"
 #include "common/key.h"
 #include "block.h"
-#include "config.h"t
+#include "config.h"
 
 int map[MAP_HEIGHT][MAP_WIDTH];
 static int IS_DEBUG = 0;
