@@ -83,17 +83,33 @@ static Block BLOCK_TEMPLATE[BLOCK_TYPE_COUNT][4] = {
         },
 };
 
+int isMoveAble(int x, int y, int blockType, int blockRotate) {
+    Block block = BLOCK_TEMPLATE[blockType][blockRotate];
+
+    if(x < 0)
+        return 0;
+
+    if(x + block.width > MAP_WIDTH)
+        return 0;
+
+    if(y + block.height > MAP_HEIGHT)
+        return 0;
+
+    return 1;
+}
+
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     initScreen();
 
     COORD position = {0, 0};
     int block_rotate = 0;
+    int blockType = 1;
 
     while (1) {
         clearScreen();
 
-        Block b = BLOCK_TEMPLATE[1][block_rotate];
+        Block b = BLOCK_TEMPLATE[blockType][block_rotate];
 
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
@@ -108,25 +124,26 @@ int main() {
         }
 
         if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-            if (position.X - 1 >= 0) {
+            if (isMoveAble(position.X - 1, position.Y, blockType, block_rotate)) {
                 position.X -= 1;
             }
         }
 
         if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-            if (position.X + b.width < MAP_WIDTH) {
+            if (isMoveAble(position.X + 1, position.Y, blockType, block_rotate)) {
                 position.X += 1;
             }
         }
 
         if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-            if (position.Y + b.height < MAP_HEIGHT) {
+            if (isMoveAble(position.X, position.Y + 1, blockType, block_rotate)) {
                 position.Y += 1;
             }
         }
         if(GetAsyncKeyState(VK_UP) & 0x8000) {
-            block_rotate += 1;
-            block_rotate %= 4;
+            if(isMoveAble(position.X, position.Y, blockType, (block_rotate + 1) % 4)){
+                block_rotate = (block_rotate + 1) % 4;
+            }
         }
 
         flipScreen();
