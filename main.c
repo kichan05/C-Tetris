@@ -51,18 +51,18 @@ static Block BLOCK_TEMPLATE[BLOCK_TYPE_COUNT][4] = {
                         {1, 1, 1}
                 }},
                 {2, 3, {
-                        {1, 0} ,
-                        {1, 1} ,
-                        {1, 0} ,
+                        {1, 0},
+                        {1, 1},
+                        {1, 0},
                 }},
                 {3, 2, {
                         {1, 1, 1},
                         {0, 1, 0}
                 }},
                 {2, 3, {
-                        {0, 1} ,
-                        {1, 1} ,
-                        {0, 1} ,
+                        {0, 1},
+                        {1, 1},
+                        {0, 1},
                 }},
         },
         {
@@ -88,21 +88,21 @@ static Block BLOCK_TEMPLATE[BLOCK_TYPE_COUNT][4] = {
 int isMoveAble(int x, int y, int blockType, int blockRotate) {
     Block block = BLOCK_TEMPLATE[blockType][blockRotate];
 
-    if(x < 0)
+    if (x < 0)
         return 0;
 
-    if(x + block.width > MAP_WIDTH)
+    if (x + block.width > MAP_WIDTH)
         return 0;
 
-    if(y + block.height > MAP_HEIGHT)
+    if (y + block.height > MAP_HEIGHT)
         return 0;
 
     for (int by = 0; by < block.height; by++) {
         for (int bx = 0; bx < block.width; bx++) {
-            if(block.shape[by][bx] == 0)
+            if (block.shape[by][bx] == 0)
                 continue;
 
-            if(map[y + by][x + bx])
+            if (map[y + by][x + bx])
                 return 0;
         }
     }
@@ -113,10 +113,9 @@ int isMoveAble(int x, int y, int blockType, int blockRotate) {
 int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     int res = isMoveAble(x, y, blockType, blockRotate);
 
-    if(res){
+    if (res) {
         writeScreen(0, MAP_HEIGHT + 1, COLOR_GREEN "move able" COLOR_RESET);
-    }
-    else {
+    } else {
         writeScreen(0, MAP_HEIGHT + 1, COLOR_RED "move unable" COLOR_RESET);
     }
 
@@ -149,7 +148,7 @@ int main() {
 
         for (int y = 0; y < b.height; y++) {
             for (int x = 0; x < b.width; x++) {
-                if(b.shape[y][x] == 1) {
+                if (b.shape[y][x] == 1) {
                     writeScreen(position.X + x, position.Y + y, COLOR_MAGENTA BLOCK COLOR_RESET);
                 }
             }
@@ -172,12 +171,16 @@ int main() {
                 position.Y += 1;
             }
         }
-        if(GetAsyncKeyState(VK_UP) & 0x8000) {
-            if(isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)){
+        if (GetAsyncKeyState(VK_UP) & 0x8000) {
+            if (isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)) {
                 block_rotate = (block_rotate + 1) % 4;
             }
         }
-        if(GetAsyncKeyState(VK_SPACE) & 0x8000) {
+        if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
+            while (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
+                position.Y += 1;
+            }
+
             for (int by = 0; by < b.height; by++) {
                 for (int bx = 0; bx < b.width; bx++) {
                     map[position.Y + by][position.X + bx] = b.shape[by][bx];
