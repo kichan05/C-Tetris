@@ -12,4 +12,7 @@ add_executable(C_Tetris main.c
         common/key.h
         ui.h
         ui.c
+        block.c
+        block.h
+        config.h
 )

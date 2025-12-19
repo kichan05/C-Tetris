@@ -6,85 +6,11 @@
 #include <time.h>
 #include "common/util.h"
 #include "common/key.h"
-
-#define MAP_WIDTH 10
-#define MAP_HEIGHT 20
-#define BLOCK_TYPE_COUNT 3
-
-#define BLOCK "█"
-#define BLANK "."
-// █▓▒░
+#include "block.h"
+#include "config.h"t
 
 int map[MAP_HEIGHT][MAP_WIDTH];
 static int IS_DEBUG = 0;
-
-typedef struct Block {
-    int width;
-    int height;
-    int shape[4][4];
-} Block;
-
-static Block BLOCK_TEMPLATE[BLOCK_TYPE_COUNT][4] = {
-        {
-                {1, 4, {
-                        {1},
-                        {1},
-                        {1},
-                        {1},
-                }},
-                {4, 1, {
-                        {1, 1, 1, 1},
-                }},
-                {1, 4, {
-                        {1},
-                        {1},
-                        {1},
-                        {1},
-                }},
-                {4, 1, {
-                        {1, 1, 1, 1},
-                }},
-        },
-        {
-                {3, 3, {
-                        {0, 0, 0},
-                        {0, 1, 0},
-                        {1, 1, 1}
-                }},
-                {2, 3, {
-                        {1, 0},
-                        {1, 1},
-                        {1, 0},
-                }},
-                {3, 2, {
-                        {1, 1, 1},
-                        {0, 1, 0}
-                }},
-                {2, 3, {
-                        {0, 1},
-                        {1, 1},
-                        {0, 1},
-                }},
-        },
-        {
-                {2, 2, {
-                        {1, 1},
-                        {1, 1},
-                }},
-                {2, 2, {
-                        {1, 1},
-                        {1, 1},
-                }},
-                {2, 2, {
-                        {1, 1},
-                        {1, 1},
-                }},
-                {2, 2, {
-                        {1, 1},
-                        {1, 1},
-                }},
-        },
-};
 
 int isMoveAble(int x, int y, int blockType, int blockRotate) {
     Block block = BLOCK_TEMPLATE[blockType][blockRotate];
@@ -123,10 +49,6 @@ int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     }
 
     return res;
-}
-
-int randomInt(int start, int end) {
-    return rand() % (end - start) + start;
 }
 
 int main() {

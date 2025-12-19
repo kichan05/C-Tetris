@@ -9,5 +9,6 @@ void chomp(char *s);
 
 void waiting(void);
 char* fs(char *fmp, ...);
+int randomInt(int start, int end);
 
 #endif //C_UTIL_H

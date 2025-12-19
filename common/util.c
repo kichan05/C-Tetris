@@ -2,6 +2,12 @@
 // Created by 바키찬 on 2025-10-13.
 //
 
+#include "key.h"
+#include "util.h"
+#include <time.h>
+#include <stdlib.h>
+#include "../ui.h"
+#include "color.h"
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
@@ -25,4 +31,8 @@ char* fs(char *fmp, ...) {
     va_end(args);
 
     return buffer;
+}
+
+int randomInt(int start, int end) {
+    return rand() % (end - start) + start;
 }
