@@ -2,6 +2,8 @@
 #include <windows.h>
 #include "common/color.h"
 #include "ui.h"
+#include <stdlib.h>
+#include <time.h>
 #include "common/util.h"
 #include "common/key.h"
 
@@ -121,17 +123,18 @@ int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     return res;
 }
 
+int randomInt(int start, int end) {
+    return rand() % (end - start) + start;
+}
+
 int main() {
+    srand(time(NULL));
     SetConsoleOutputCP(CP_UTF8);
     initScreen();
 
     COORD position = {0, 0};
     int block_rotate = 0;
     int blockType = 1;
-
-    for (int i = 0; i < MAP_WIDTH; ++i) {
-        map[5][i] = 1;
-    }
 
     while (1) {
         clearScreen();
@@ -173,6 +176,18 @@ int main() {
             if(isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)){
                 block_rotate = (block_rotate + 1) % 4;
             }
+        }
+        if(GetAsyncKeyState(VK_SPACE) & 0x8000) {
+            for (int by = 0; by < b.height; by++) {
+                for (int bx = 0; bx < b.width; bx++) {
+                    map[position.Y + by][position.X + bx] = b.shape[by][bx];
+                }
+            }
+
+            position.X = 0;
+            position.Y = 0;
+            blockType = randomInt(0, BLOCK_TYPE_COUNT);
+            block_rotate = 0;
         }
 
         flipScreen();
