@@ -98,6 +98,19 @@ int isMoveAble(int x, int y, int blockType, int blockRotate) {
     return 1;
 }
 
+int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
+    int res = isMoveAble(x, y, blockType, blockRotate);
+
+    if(res){
+        writeScreen(0, MAP_HEIGHT + 1, COLOR_GREEN "move able" COLOR_RESET);
+    }
+    else {
+        writeScreen(0, MAP_HEIGHT + 1, COLOR_RED "move unable" COLOR_RESET);
+    }
+
+    return res;
+}
+
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     initScreen();
@@ -124,24 +137,24 @@ int main() {
         }
 
         if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-            if (isMoveAble(position.X - 1, position.Y, blockType, block_rotate)) {
+            if (isMoveAbleWrap(position.X - 1, position.Y, blockType, block_rotate)) {
                 position.X -= 1;
             }
         }
 
         if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-            if (isMoveAble(position.X + 1, position.Y, blockType, block_rotate)) {
+            if (isMoveAbleWrap(position.X + 1, position.Y, blockType, block_rotate)) {
                 position.X += 1;
             }
         }
 
         if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-            if (isMoveAble(position.X, position.Y + 1, blockType, block_rotate)) {
+            if (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
                 position.Y += 1;
             }
         }
         if(GetAsyncKeyState(VK_UP) & 0x8000) {
-            if(isMoveAble(position.X, position.Y, blockType, (block_rotate + 1) % 4)){
+            if(isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)){
                 block_rotate = (block_rotate + 1) % 4;
             }
         }
