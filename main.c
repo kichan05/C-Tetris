@@ -95,6 +95,16 @@ int isMoveAble(int x, int y, int blockType, int blockRotate) {
     if(y + block.height > MAP_HEIGHT)
         return 0;
 
+    for (int by = 0; by < block.height; by++) {
+        for (int bx = 0; bx < block.width; bx++) {
+            if(block.shape[by][bx] == 0)
+                continue;
+
+            if(map[y + by][x + bx])
+                return 0;
+        }
+    }
+
     return 1;
 }
 
