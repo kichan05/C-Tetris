@@ -16,6 +16,7 @@
 // █▓▒░
 
 int map[MAP_HEIGHT][MAP_WIDTH];
+static int IS_DEBUG = 0;
 
 typedef struct Block {
     int width;
@@ -113,10 +114,12 @@ int isMoveAble(int x, int y, int blockType, int blockRotate) {
 int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     int res = isMoveAble(x, y, blockType, blockRotate);
 
-    if (res) {
-        writeScreen(0, MAP_HEIGHT + 1, COLOR_GREEN "move able" COLOR_RESET);
-    } else {
-        writeScreen(0, MAP_HEIGHT + 1, COLOR_RED "move unable" COLOR_RESET);
+    if(IS_DEBUG) {
+        if (res) {
+            writeScreen(0, MAP_HEIGHT + 1, COLOR_GREEN "move able" COLOR_RESET);
+        } else {
+            writeScreen(0, MAP_HEIGHT + 1, COLOR_RED "move unable" COLOR_RESET);
+        }
     }
 
     return res;
@@ -183,7 +186,9 @@ int main() {
 
             for (int by = 0; by < b.height; by++) {
                 for (int bx = 0; bx < b.width; bx++) {
-                    map[position.Y + by][position.X + bx] = b.shape[by][bx];
+                    if(b.shape[by][bx]){
+                        map[position.Y + by][position.X + bx] = b.shape[by][bx];
+                    }
                 }
             }
 
