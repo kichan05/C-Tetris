@@ -7,7 +7,7 @@
 
 #define MAP_WIDTH 10
 #define MAP_HEIGHT 20
-#define BLOCK_TYPE_COUNT 3
+#define BLOCK_TYPE_COUNT 7
 #define BLOCK "█"
 #define BLANK "."
 // █▓▒░
