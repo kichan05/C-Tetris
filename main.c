@@ -119,6 +119,10 @@ int main() {
     int block_rotate = 0;
     int blockType = 1;
 
+    for (int i = 0; i < MAP_WIDTH; ++i) {
+        map[5][i] = 1;
+    }
+
     while (1) {
         clearScreen();
 
@@ -132,7 +136,9 @@ int main() {
 
         for (int y = 0; y < b.height; y++) {
             for (int x = 0; x < b.width; x++) {
-                writeScreen(position.X + x, position.Y + y, b.shape[y][x] == 0 ? BLANK : BLOCK);
+                if(b.shape[y][x] == 1) {
+                    writeScreen(position.X + x, position.Y + y, COLOR_MAGENTA BLOCK COLOR_RESET);
+                }
             }
         }
 
