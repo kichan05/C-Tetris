@@ -88,6 +88,17 @@ void printPhaseBlock(COORD *position, int phaseY, Block *b, UiConfig *uiConfig) 
     }
 }
 
+void printMapBoard(UiConfig* uiConfig) {
+    for (int y = 0; y < MAP_HEIGHT; ++y) {
+        writeScreen(uiConfig->leftPadding - 1, y, BLOCK);
+        writeScreen(uiConfig->leftPadding + MAP_WIDTH, y, BLOCK);
+    }
+
+    for (int x = -1; x < MAP_WIDTH + 1; ++x) {
+        writeScreen(uiConfig->leftPadding + x, MAP_HEIGHT, BLOCK);
+    }
+}
+
 int isFullLine(int line) {
     for (int x = 0; x < MAP_WIDTH; x++) {
         if (!map[line][x]) {
@@ -173,6 +184,7 @@ void mainScene() {
             phaseY += 1;
         }
 
+        printMapBoard(&uiConfig);
         printMap(&uiConfig);
         printPhaseBlock(&position, phaseY, &b, &uiConfig);
         printPlayerBlock(&position, &b, &uiConfig);
