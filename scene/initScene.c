@@ -36,6 +36,6 @@ int initScene() {
         }
 
         flipScreen();
-        Sleep(60);
+        Sleep(33);
     }
 }
