@@ -10,5 +10,8 @@
 #define COLOR_MAGENTA "\033[35m"
 #define COLOR_CYAN "\033[36m"
 #define COLOR_WHITE "\033[37m"
+#define COLOR_ORANGE "\x1b[38;5;208m"
+
+char* getBlockColorCode(int blockType);
 
 #endif //C_COLOR_H

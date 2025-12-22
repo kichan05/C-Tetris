@@ -40,7 +40,7 @@ int isMoveAble(int x, int y, int blockType, int blockRotate) {
 int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     int res = isMoveAble(x, y, blockType, blockRotate);
 
-    if(IS_DEBUG) {
+    if (IS_DEBUG) {
         if (res) {
             writeScreen(0, MAP_HEIGHT + 1, COLOR_GREEN "move able" COLOR_RESET);
         } else {
@@ -70,14 +70,17 @@ int main() {
 
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
-                writeScreen(x, y, map[y][x] == 0 ? BLANK : BLOCK);
+                writeScreen(
+                        x, y,
+                        map[y][x] == 0 ? BLANK : fs("%s%s%s", getBlockColorCode(map[y][x]), BLOCK, COLOR_RESET)
+                );
             }
         }
 
         for (int y = 0; y < b.height; y++) {
             for (int x = 0; x < b.width; x++) {
                 if (b.shape[y][x]) {
-                    writeScreen(position.X + x, position.Y + y, COLOR_MAGENTA BLOCK COLOR_RESET);
+                    writeScreen(position.X + x, position.Y + y, fs("%s%s%s", getBlockColorCode(b.shape[y][x]), BLOCK, COLOR_RESET));
                 }
             }
         }
@@ -86,18 +89,15 @@ int main() {
             if (isMoveAbleWrap(position.X - 1, position.Y, blockType, block_rotate)) {
                 position.X -= 1;
             }
-        }
-        else if (isKeyDown(VK_RIGHT)) {
+        } else if (isKeyDown(VK_RIGHT)) {
             if (isMoveAbleWrap(position.X + 1, position.Y, blockType, block_rotate)) {
                 position.X += 1;
             }
-        }
-        else if (isKeyDown(VK_DOWN)) {
+        } else if (isKeyDown(VK_DOWN)) {
             if (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
                 position.Y += 1;
             }
-        }
-        else if (isKeyDowned(VK_UP)) {
+        } else if (isKeyDowned(VK_UP)) {
             if (isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)) {
                 block_rotate = (block_rotate + 1) % 4;
             }
@@ -110,7 +110,7 @@ int main() {
 
             for (int by = 0; by < b.height; by++) {
                 for (int bx = 0; bx < b.width; bx++) {
-                    if(b.shape[by][bx]){
+                    if (b.shape[by][bx]) {
                         map[position.Y + by][position.X + bx] = b.shape[by][bx];
                     }
                 }
