@@ -93,6 +93,16 @@ int isFullLine(int line) {
     return 1;
 }
 
+void playerBlockToMapBlock(int x, int y, Block b) {
+    for (int by = 0; by < b.height; by++) {
+        for (int bx = 0; bx < b.width; bx++) {
+            if(b.shape[by][bx]) {
+                map[y + by][x + bx] = b.shape[by][bx];
+            }
+        }
+    }
+}
+
 void lineCopyPasse(int copyLine, int pastLine) {
     for (int x = 0; x < MAP_WIDTH; x++) {
         map[pastLine][x] = map[copyLine][x];
@@ -169,18 +179,14 @@ int main() {
         }
 
         if (isKeyDowned(VK_SPACE)) {
-            for (int by = 0; by < b.height; by++) {
-                for (int bx = 0; bx < b.width; bx++) {
-                    if (b.shape[by][bx]) {
-                        map[phaseY + by][position.X + bx] = b.shape[by][bx];
-                    }
-                }
-            }
+            playerBlockToMapBlock(position.X, phaseY, b);
 
             position.X = 0;
             position.Y = 0;
             blockType = randomInt(0, BLOCK_TYPE_COUNT);
             block_rotate = 0;
+            downDump = 0;
+            bottomDump = 0;
         }
 
         if(downDump >= 5){
@@ -193,18 +199,14 @@ int main() {
             }
 
             if(bottomDump > 2) {
-                for (int by = 0; by < b.height; by++) {
-                    for (int bx = 0; bx < b.width; bx++) {
-                        if (b.shape[by][bx]) {
-                            map[phaseY + by][position.X + bx] = b.shape[by][bx];
-                        }
-                    }
-                }
+                playerBlockToMapBlock(position.X, position.Y, b);
 
                 position.X = 0;
                 position.Y = 0;
                 blockType = randomInt(0, BLOCK_TYPE_COUNT);
                 block_rotate = 0;
+                downDump = 0;
+                bottomDump = 0;
             }
         }
 
