@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <conio.h>
 
+static int keyState[256] = {0};
+
 int getKeyPress() {
     if(!_kbhit()) {
         return -1;
@@ -23,7 +25,6 @@ int getKeyPress() {
 }
 
 int isKeyDowned(int vk) {
-    static int keyState[256] = {0};
     int current = GetAsyncKeyState(vk) & 0x8000;
 
     if(current && !keyState[vk]) {
@@ -36,6 +37,12 @@ int isKeyDowned(int vk) {
     }
 
     return 0;
+}
+
+void clearKeyState() {
+    for (int i = 0; i < 256; i++) {
+        keyState[i] = 0;
+    }
 }
 
 int isKeyDown(int vk) {

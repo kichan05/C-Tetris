@@ -24,5 +24,6 @@ typedef enum {
 int getKeyPress();
 int isKeyDowned(int vk);
 int isKeyDown(int vk);
+void clearKeyState();
 
 #endif //C_PLAYLIST_KEY_H
