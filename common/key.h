@@ -22,5 +22,7 @@ typedef enum {
 } KeyCode;
 
 int getKeyPress();
+int isKeyDowned(int vk);
+int isKeyDown(int vk);
 
 #endif //C_PLAYLIST_KEY_H

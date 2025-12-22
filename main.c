@@ -82,29 +82,28 @@ int main() {
             }
         }
 
-        if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
+        if (isKeyDown(VK_LEFT)) {
             if (isMoveAbleWrap(position.X - 1, position.Y, blockType, block_rotate)) {
                 position.X -= 1;
             }
         }
-
-        if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
+        else if (isKeyDown(VK_RIGHT)) {
             if (isMoveAbleWrap(position.X + 1, position.Y, blockType, block_rotate)) {
                 position.X += 1;
             }
         }
-
-        if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
+        else if (isKeyDown(VK_DOWN)) {
             if (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
                 position.Y += 1;
             }
         }
-        if (GetAsyncKeyState(VK_UP) & 0x8000) {
+        else if (isKeyDowned(VK_UP)) {
             if (isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)) {
                 block_rotate = (block_rotate + 1) % 4;
             }
         }
-        if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
+
+        if (isKeyDowned(VK_SPACE)) {
             while (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
                 position.Y += 1;
             }

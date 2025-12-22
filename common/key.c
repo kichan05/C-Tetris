@@ -2,6 +2,11 @@
 // Created by 바키찬 on 2025-10-13.
 //
 
+#include "key.h"
+#include <time.h>
+#include <stdlib.h>
+#include <windows.h>
+#include <stdio.h>
 #include <conio.h>
 
 int getKeyPress() {
@@ -15,4 +20,26 @@ int getKeyPress() {
     }
 
     return key;
+}
+
+int isKeyDowned(int vk) {
+    static int keyState[256] = {0};
+    int current = GetAsyncKeyState(vk) & 0x8000;
+
+    if(current && !keyState[vk]) {
+        keyState[vk] = 1;
+        return 1;
+    }
+
+    if(!current) {
+        keyState[vk] = 0;
+    }
+
+    return 0;
+}
+
+int isKeyDown(int vk) {
+    int current = GetAsyncKeyState(vk) & 0x8000;
+
+    return current;
 }
