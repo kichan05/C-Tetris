@@ -26,5 +26,7 @@ void writeScreen(int x, int y, char *text);
 void flipScreen();
 void releaseScreen();
 
+void writeHorizontalCenter(int y, char* text);
+
 
 #endif //C_UI_H

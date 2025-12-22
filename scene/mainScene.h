@@ -10,7 +10,9 @@
 #include "../common/util.h"
 #include "../common/key.h"
 #include "../block.h"
+#include "./gameResultScene.h"
 
+void initMap();
 
 int isMoveAble(int x, int y, int blockType, int blockRotate);
 int isMoveAbleWrap(int x, int y, int blockType, int blockRotate);
@@ -18,6 +20,10 @@ int isMoveAbleWrap(int x, int y, int blockType, int blockRotate);
 void printMap();
 void printPlayerBlock(COORD *position, Block *b);
 void printPhaseBlock(COORD *position, int phaseY, Block *b);
+
+int isFullLine(int line);
+int isAnyBlockInLine(int line);
+
 
 void lineCopyPasse(int copyLine, int pastLine);
 void lineFillBlank(int line);

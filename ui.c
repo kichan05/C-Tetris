@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "ui.h"
 #include <stdarg.h>
+#include <string.h>
 
 static HANDLE hBuffer[2];
 static int nScreenIndex = 0;
@@ -76,7 +77,13 @@ void initScreen() {
 void clearScreen() {
     COORD coord = {0, 0};
     DWORD dw;
-    FillConsoleOutputCharacter(hBuffer[nScreenIndex], ' ', 80 * 25, coord, &dw);
+
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hBuffer[nScreenIndex], &csbi);
+
+    DWORD bufferSize = csbi.dwSize.X * csbi.dwSize.Y;
+    FillConsoleOutputCharacter(hBuffer[nScreenIndex], ' ', bufferSize, coord, &dw);
+    FillConsoleOutputAttribute(hBuffer[nScreenIndex], 7, bufferSize, coord, &dw);
 }
 
 void writeScreen(int x, int y, char *text) {
@@ -95,4 +102,11 @@ void flipScreen() {
 void releaseScreen() {
     CloseHandle(hBuffer[0]);
     CloseHandle(hBuffer[1]);
+}
+
+void writeHorizontalCenter(int y, char* text) {
+    int windowWidth = getWindowWidth();
+    int textLength = strlen(text);
+
+    writeScreen((windowWidth - textLength) / 2, y, text);
 }

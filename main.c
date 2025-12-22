@@ -13,15 +13,18 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
     initScreen();
 
-    int selectMeniIndex = initScene();
+    while (1) {
+        int selectMeniIndex = initScene();
 
-    switch (selectMeniIndex) {
-        case 0:
-            mainScene();
-        case 1:
-            break;
-        case 2:
-            break;
+        switch (selectMeniIndex) {
+            case 0:
+                mainScene();
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
     }
 
     return 0;

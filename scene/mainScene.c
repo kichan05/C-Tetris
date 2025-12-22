@@ -7,6 +7,14 @@
 int map[MAP_HEIGHT][MAP_WIDTH];
 static int IS_DEBUG = 0;
 
+void initMap() {
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            map[y][x] = 0;
+        }
+    }
+}
+
 int isMoveAble(int x, int y, int blockType, int blockRotate) {
     Block block = BLOCK_TEMPLATE[blockType][blockRotate];
 
@@ -88,6 +96,15 @@ int isFullLine(int line) {
     return 1;
 }
 
+int isAnyBlockInLine(int line){
+    for (int x = 0; x < MAP_WIDTH; x++) {
+        if(map[line][x]){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void playerBlockToMapBlock(int x, int y, Block b) {
     for (int by = 0; by < b.height; by++) {
         for (int bx = 0; bx < b.width; bx++) {
@@ -121,6 +138,7 @@ void readNextBlock(COORD* position, int* blockType, int* blockRotate, int* downD
 }
 
 void mainScene() {
+    initMap();
     COORD position = {0, 0};
     int score = 0;
     int blockRotate = 0;
@@ -132,6 +150,11 @@ void mainScene() {
 
     while (1) {
         clearScreen();
+
+        if(isAnyBlockInLine(0)) {
+            gameResultScene(score);
+            return;
+        }
 
         Block b = BLOCK_TEMPLATE[blockType][blockRotate];
 

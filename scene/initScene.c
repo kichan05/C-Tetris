@@ -13,7 +13,7 @@ int initScene() {
     while (1) {
         clearScreen();
 
-        writeScreen(0, 0, "Welecome Tetris");
+        writeScreen(0, 0, "Welcome Tetris");
         writeScreen(0, 1, fs("%s1. Play Tetris%s", selectMeniIndex == 0 ? COLOR_YELLOW : COLOR_RESET, COLOR_RESET));
         writeScreen(0, 2, fs("%s2. Setting Game%s", selectMeniIndex == 1 ? COLOR_YELLOW : COLOR_RESET, COLOR_RESET));
         writeScreen(0, 3, fs("%s3. Exit%s", selectMeniIndex == 2 ? COLOR_YELLOW : COLOR_RESET, COLOR_RESET));
