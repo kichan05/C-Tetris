@@ -111,7 +111,7 @@ static Block BLOCK_TEMPLATE[BLOCK_TYPE_COUNT][4] = {
                 {2, 3, {
                                {5, 5},
                                {0, 5},
-                               {0, 0},
+                               {0, 5},
                        }},
                 {3, 2, {
                                {0, 0, 5},

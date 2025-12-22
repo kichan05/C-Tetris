@@ -51,7 +51,7 @@ int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     return res;
 }
 
-void printMap(){
+void printMap() {
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             writeScreen(
@@ -62,11 +62,23 @@ void printMap(){
     }
 }
 
-void printPlayerBlock(COORD* position, Block* b) {
+void printPlayerBlock(COORD *position, Block *b) {
     for (int y = 0; y < b->height; y++) {
         for (int x = 0; x < b->width; x++) {
             if (b->shape[y][x]) {
-                writeScreen(position->X + x, position->Y + y, fs("%s%s%s", getBlockColorCode(b->shape[y][x]), BLOCK, COLOR_RESET));
+                writeScreen(position->X + x, position->Y + y,
+                            fs("%s%s%s", getBlockColorCode(b->shape[y][x]), BLOCK, COLOR_RESET));
+            }
+        }
+    }
+}
+
+void printPhaseBlock(COORD *position, int phaseY, Block *b) {
+    for (int y = 0; y < b->height; y++) {
+        for (int x = 0; x < b->width; x++) {
+            if (b->shape[y][x]) {
+                writeScreen(position->X + x, phaseY + y,
+                            fs("%s%s%s", COLOR_WHITE, BLOCK, COLOR_RESET));
             }
         }
     }
@@ -80,6 +92,7 @@ int main() {
     COORD position = {0, 0};
     int block_rotate = 0;
     int blockType = 0;
+    int phaseY = 0;
 
     while (1) {
         clearScreen();
@@ -89,8 +102,14 @@ int main() {
         writeScreen(0, MAP_HEIGHT + 1, fs("X : %d   \tY : %d", position.X, position.Y));
         writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, block_rotate));
 
+        phaseY = position.Y;
+        while (isMoveAbleWrap(position.X, phaseY + 1, blockType, block_rotate)) {
+            phaseY += 1;
+        }
+
         printMap();
         printPlayerBlock(&position, &b);
+        printPhaseBlock(&position, phaseY, &b);
 
 
         if (isKeyDown(VK_LEFT)) {
@@ -112,14 +131,10 @@ int main() {
         }
 
         if (isKeyDowned(VK_SPACE)) {
-            while (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
-                position.Y += 1;
-            }
-
             for (int by = 0; by < b.height; by++) {
                 for (int bx = 0; bx < b.width; bx++) {
                     if (b.shape[by][bx]) {
-                        map[position.Y + by][position.X + bx] = b.shape[by][bx];
+                        map[phaseY + by][position.X + bx] = b.shape[by][bx];
                     }
                 }
             }
