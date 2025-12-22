@@ -19,6 +19,7 @@ int main() {
         switch (selectMeniIndex) {
             case 0:
                 mainScene();
+                clearKeyState();
                 break;
             case 1:
                 break;
