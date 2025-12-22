@@ -21,9 +21,9 @@ void printPhaseBlock(COORD *position, int phaseY, Block *b);
 
 void lineCopyPasse(int copyLine, int pastLine);
 void lineFillBlank(int line);
-void mainScene();
-
 void playerBlockToMapBlock(int x, int y, Block b);
+
+void mainScene();
 
 
 #endif //C_TETRIS_MAINSCENE_H
