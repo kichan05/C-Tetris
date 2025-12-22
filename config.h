@@ -9,6 +9,7 @@
 #define MAP_HEIGHT 20
 #define BLOCK_TYPE_COUNT 7
 #define BLOCK "█"
+#define PHASE_BLOCK "░"
 #define BLANK "."
 // █▓▒░
 

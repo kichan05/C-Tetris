@@ -78,7 +78,7 @@ void printPhaseBlock(COORD *position, int phaseY, Block *b) {
         for (int x = 0; x < b->width; x++) {
             if (b->shape[y][x]) {
                 writeScreen(position->X + x, phaseY + y,
-                            fs("%s%s%s", COLOR_WHITE, BLOCK, COLOR_RESET));
+                            fs("%s%s%s", COLOR_WHITE, PHASE_BLOCK, COLOR_RESET));
             }
         }
     }
@@ -108,8 +108,8 @@ int main() {
         }
 
         printMap();
-        printPlayerBlock(&position, &b);
         printPhaseBlock(&position, phaseY, &b);
+        printPlayerBlock(&position, &b);
 
 
         if (isKeyDown(VK_LEFT)) {
