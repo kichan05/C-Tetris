@@ -115,6 +115,7 @@ int main() {
     int block_rotate = 0;
     int blockType = 0;
     int downDump = 0;
+    int bottomDump = 0;
 
     while (1) {
         clearScreen();
@@ -139,21 +140,28 @@ int main() {
             if (isMoveAbleWrap(position.X - 1, position.Y, blockType, block_rotate)) {
                 position.X -= 1;
                 downDump = 0;
+                bottomDump = 0;
             }
-        } else if (isKeyDown(VK_RIGHT)) {
+        }
+        if (isKeyDown(VK_RIGHT)) {
             if (isMoveAbleWrap(position.X + 1, position.Y, blockType, block_rotate)) {
                 position.X += 1;
                 downDump = 0;
+                bottomDump = 0;
             }
-        } else if (isKeyDown(VK_DOWN)) {
+        }
+        if (isKeyDown(VK_DOWN)) {
             if (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
                 position.Y += 1;
                 downDump = 0;
+                bottomDump = 0;
             }
-        } else if (isKeyDowned(VK_UP)) {
+        }
+        if (isKeyDowned(VK_UP)) {
             if (isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)) {
                 block_rotate = (block_rotate + 1) % 4;
                 downDump = 0;
+                bottomDump = 0;
             }
         }
         else {
@@ -181,6 +189,10 @@ int main() {
                 downDump = 0;
             }
             else {
+                bottomDump += 1;
+            }
+
+            if(bottomDump > 2) {
                 for (int by = 0; by < b.height; by++) {
                     for (int bx = 0; bx < b.width; bx++) {
                         if (b.shape[by][bx]) {
