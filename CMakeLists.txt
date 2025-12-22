@@ -17,4 +17,6 @@ add_executable(C_Tetris main.c
         config.h
         scene/mainScene.c
         scene/mainScene.h
+        scene/initScene.c
+        scene/initScene.h
 )
