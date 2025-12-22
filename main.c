@@ -111,6 +111,7 @@ int main() {
     initScreen();
 
     COORD position = {0, 0};
+    int score = 0;
     int block_rotate = 0;
     int blockType = 0;
     int phaseY = 0;
@@ -122,6 +123,7 @@ int main() {
 
         writeScreen(0, MAP_HEIGHT + 1, fs("X : %d   \tY : %d", position.X, position.Y));
         writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, block_rotate));
+        writeScreen(0, MAP_HEIGHT + 3, fs("%sScore: %d%s", COLOR_YELLOW, score, COLOR_RESET));
 
         phaseY = position.Y;
         while (isMoveAbleWrap(position.X, phaseY + 1, blockType, block_rotate)) {
@@ -173,6 +175,7 @@ int main() {
                 }
 
                 lineFillBlank(0);
+                score += 1;
             }
         }
 
