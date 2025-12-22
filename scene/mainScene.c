@@ -110,25 +110,37 @@ void lineFillBlank(int line) {
     }
 }
 
+void readNextBlock(COORD* position, int* blockType, int* blockRotate, int* downDump, int* bottomDump) {
+    position->X = MAP_WIDTH / 2;
+    position->Y = 0;
+
+    *blockType = randomInt(0, BLOCK_TYPE_COUNT);
+    *blockRotate = 0;
+    *downDump = 0;
+    *bottomDump = 0;
+}
+
 void mainScene() {
     COORD position = {0, 0};
     int score = 0;
-    int block_rotate = 0;
+    int blockRotate = 0;
     int blockType = 0;
     int downDump = 0;
     int bottomDump = 0;
 
+    readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
+
     while (1) {
         clearScreen();
 
-        Block b = BLOCK_TEMPLATE[blockType][block_rotate];
+        Block b = BLOCK_TEMPLATE[blockType][blockRotate];
 
         writeScreen(0, MAP_HEIGHT + 1, fs("X : %d   \tY : %d", position.X, position.Y));
-        writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, block_rotate));
+        writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, blockRotate));
         writeScreen(0, MAP_HEIGHT + 3, fs("%sScore: %d%s", COLOR_YELLOW, score, COLOR_RESET));
 
         int phaseY = position.Y;
-        while (isMoveAbleWrap(position.X, phaseY + 1, blockType, block_rotate)) {
+        while (isMoveAbleWrap(position.X, phaseY + 1, blockType, blockRotate)) {
             phaseY += 1;
         }
 
@@ -136,31 +148,42 @@ void mainScene() {
         printPhaseBlock(&position, phaseY, &b);
         printPlayerBlock(&position, &b);
 
-
         if (isKeyDown(VK_LEFT)) {
-            if (isMoveAbleWrap(position.X - 1, position.Y, blockType, block_rotate)) {
+            if (isMoveAbleWrap(position.X - 1, position.Y, blockType, blockRotate)) {
                 position.X -= 1;
                 downDump = 0;
                 bottomDump = 0;
             }
         }
+        else {
+            downDump += 1;
+        }
+
         if (isKeyDown(VK_RIGHT)) {
-            if (isMoveAbleWrap(position.X + 1, position.Y, blockType, block_rotate)) {
+            if (isMoveAbleWrap(position.X + 1, position.Y, blockType, blockRotate)) {
                 position.X += 1;
                 downDump = 0;
                 bottomDump = 0;
             }
         }
+        else {
+            downDump += 1;
+        }
+
         if (isKeyDown(VK_DOWN)) {
-            if (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
+            if (isMoveAbleWrap(position.X, position.Y + 1, blockType, blockRotate)) {
                 position.Y += 1;
                 downDump = 0;
                 bottomDump = 0;
             }
         }
+        else {
+            downDump += 1;
+        }
+
         if (isKeyDowned(VK_UP)) {
-            if (isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)) {
-                block_rotate = (block_rotate + 1) % 4;
+            if (isMoveAbleWrap(position.X, position.Y, blockType, (blockRotate + 1) % 4)) {
+                blockRotate = (blockRotate + 1) % 4;
                 downDump = 0;
                 bottomDump = 0;
             }
@@ -171,17 +194,11 @@ void mainScene() {
 
         if (isKeyDowned(VK_SPACE)) {
             playerBlockToMapBlock(position.X, phaseY, b);
-
-            position.X = 0;
-            position.Y = 0;
-            blockType = randomInt(0, BLOCK_TYPE_COUNT);
-            block_rotate = 0;
-            downDump = 0;
-            bottomDump = 0;
+            readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
         }
 
         if(downDump >= 5){
-            if(isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
+            if(isMoveAbleWrap(position.X, position.Y + 1, blockType, blockRotate)) {
                 position.Y += 1;
                 downDump = 0;
             }
@@ -191,13 +208,7 @@ void mainScene() {
 
             if(bottomDump > 2) {
                 playerBlockToMapBlock(position.X, position.Y, b);
-
-                position.X = 0;
-                position.Y = 0;
-                blockType = randomInt(0, BLOCK_TYPE_COUNT);
-                block_rotate = 0;
-                downDump = 0;
-                bottomDump = 0;
+                readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
             }
         }
 
