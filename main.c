@@ -114,7 +114,7 @@ int main() {
     int score = 0;
     int block_rotate = 0;
     int blockType = 0;
-    int phaseY = 0;
+    int downDump = 0;
 
     while (1) {
         clearScreen();
@@ -125,7 +125,7 @@ int main() {
         writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, block_rotate));
         writeScreen(0, MAP_HEIGHT + 3, fs("%sScore: %d%s", COLOR_YELLOW, score, COLOR_RESET));
 
-        phaseY = position.Y;
+        int phaseY = position.Y;
         while (isMoveAbleWrap(position.X, phaseY + 1, blockType, block_rotate)) {
             phaseY += 1;
         }
@@ -138,19 +138,26 @@ int main() {
         if (isKeyDown(VK_LEFT)) {
             if (isMoveAbleWrap(position.X - 1, position.Y, blockType, block_rotate)) {
                 position.X -= 1;
+                downDump = 0;
             }
         } else if (isKeyDown(VK_RIGHT)) {
             if (isMoveAbleWrap(position.X + 1, position.Y, blockType, block_rotate)) {
                 position.X += 1;
+                downDump = 0;
             }
         } else if (isKeyDown(VK_DOWN)) {
             if (isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
                 position.Y += 1;
+                downDump = 0;
             }
         } else if (isKeyDowned(VK_UP)) {
             if (isMoveAbleWrap(position.X, position.Y, blockType, (block_rotate + 1) % 4)) {
                 block_rotate = (block_rotate + 1) % 4;
+                downDump = 0;
             }
+        }
+        else {
+            downDump += 1;
         }
 
         if (isKeyDowned(VK_SPACE)) {
@@ -166,6 +173,27 @@ int main() {
             position.Y = 0;
             blockType = randomInt(0, BLOCK_TYPE_COUNT);
             block_rotate = 0;
+        }
+
+        if(downDump >= 5){
+            if(isMoveAbleWrap(position.X, position.Y + 1, blockType, block_rotate)) {
+                position.Y += 1;
+                downDump = 0;
+            }
+            else {
+                for (int by = 0; by < b.height; by++) {
+                    for (int bx = 0; bx < b.width; bx++) {
+                        if (b.shape[by][bx]) {
+                            map[phaseY + by][position.X + bx] = b.shape[by][bx];
+                        }
+                    }
+                }
+
+                position.X = 0;
+                position.Y = 0;
+                blockType = randomInt(0, BLOCK_TYPE_COUNT);
+                block_rotate = 0;
+            }
         }
 
         for (int y = 0; y < MAP_HEIGHT; ++y) {
