@@ -11,15 +11,16 @@
 #include "../common/key.h"
 #include "../block.h"
 #include "./gameResultScene.h"
+#include "./../uiConfig.h"
 
 void initMap();
 
 int isMoveAble(int x, int y, int blockType, int blockRotate);
 int isMoveAbleWrap(int x, int y, int blockType, int blockRotate);
 
-void printMap();
-void printPlayerBlock(COORD *position, Block *b);
-void printPhaseBlock(COORD *position, int phaseY, Block *b);
+void printMap(UiConfig *uiConfig);
+void printPlayerBlock(COORD *position, Block *b, UiConfig *uiConfig);
+void printPhaseBlock(COORD *position, int phaseY, Block *b, UiConfig *uiConfig);
 
 int isFullLine(int line);
 int isAnyBlockInLine(int line);

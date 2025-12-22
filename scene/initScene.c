@@ -31,7 +31,7 @@ int initScene() {
     while (1) {
         clearScreen();
 
-        int titleY = 5; // 원하는 Y축 시작 위치 (예: 5번째 줄부터)
+        int titleY = 5;
         writeRainbowCenter(titleY++, " ____  ____  ____  ____   __   ____ ");
         writeRainbowCenter(titleY++, "(_  _)(  __)(_  _)(  _ \\ (  ) / ___\\");
         writeRainbowCenter(titleY++, "  )(   ) _)   )(   )   /  )(  \\___ \\");

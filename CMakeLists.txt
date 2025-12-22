@@ -21,4 +21,6 @@ add_executable(C_Tetris main.c
         scene/initScene.h
         scene/gameResultScene.c
         scene/gameResultScene.h
+        uiConfig.c
+        uiConfig.h
 )

@@ -24,7 +24,7 @@ int main() {
             case 1:
                 break;
             case 2:
-                break;
+                return 1;
         }
     }
 

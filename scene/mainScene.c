@@ -54,33 +54,34 @@ int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     return res;
 }
 
-void printMap() {
+void printMap(UiConfig *uiConfig) {
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             writeScreen(
-                    x, y,
+                    x + uiConfig->leftPadding, y,
                     map[y][x] == 0 ? BLANK : fs("%s%s%s", getBlockColorCode(map[y][x]), BLOCK, COLOR_RESET)
             );
         }
     }
 }
 
-void printPlayerBlock(COORD *position, Block *b) {
+void printPlayerBlock(COORD *position, Block *b, UiConfig *uiConfig) {
+
     for (int y = 0; y < b->height; y++) {
         for (int x = 0; x < b->width; x++) {
             if (b->shape[y][x]) {
-                writeScreen(position->X + x, position->Y + y,
+                writeScreen(position->X + x + uiConfig->leftPadding, position->Y + y,
                             fs("%s%s%s", getBlockColorCode(b->shape[y][x]), BLOCK, COLOR_RESET));
             }
         }
     }
 }
 
-void printPhaseBlock(COORD *position, int phaseY, Block *b) {
+void printPhaseBlock(COORD *position, int phaseY, Block *b, UiConfig *uiConfig) {
     for (int y = 0; y < b->height; y++) {
         for (int x = 0; x < b->width; x++) {
             if (b->shape[y][x]) {
-                writeScreen(position->X + x, phaseY + y,
+                writeScreen(position->X + x + uiConfig->leftPadding, phaseY + y,
                             fs("%s%s%s", COLOR_WHITE, PHASE_BLOCK, COLOR_RESET));
             }
         }
@@ -89,16 +90,16 @@ void printPhaseBlock(COORD *position, int phaseY, Block *b) {
 
 int isFullLine(int line) {
     for (int x = 0; x < MAP_WIDTH; x++) {
-        if(!map[line][x]){
+        if (!map[line][x]) {
             return 0;
         }
     }
     return 1;
 }
 
-int isAnyBlockInLine(int line){
+int isAnyBlockInLine(int line) {
     for (int x = 0; x < MAP_WIDTH; x++) {
-        if(map[line][x]){
+        if (map[line][x]) {
             return 1;
         }
     }
@@ -108,7 +109,7 @@ int isAnyBlockInLine(int line){
 void playerBlockToMapBlock(int x, int y, Block b) {
     for (int by = 0; by < b.height; by++) {
         for (int bx = 0; bx < b.width; bx++) {
-            if(b.shape[by][bx]) {
+            if (b.shape[by][bx]) {
                 map[y + by][x + bx] = b.shape[by][bx];
             }
         }
@@ -127,7 +128,7 @@ void lineFillBlank(int line) {
     }
 }
 
-void readNextBlock(COORD* position, int* blockType, int* blockRotate, int* downDump, int* bottomDump) {
+void readNextBlock(COORD *position, int *blockType, int *blockRotate, int *downDump, int *bottomDump) {
     position->X = MAP_WIDTH / 2;
     position->Y = 0;
 
@@ -139,6 +140,11 @@ void readNextBlock(COORD* position, int* blockType, int* blockRotate, int* downD
 
 void mainScene() {
     initMap();
+
+    UiConfig uiConfig = {
+            (getWindowWidth() - MAP_WIDTH) / 2,
+    };
+
     COORD position = {0, 0};
     int score = 0;
     int blockRotate = 0;
@@ -151,25 +157,25 @@ void mainScene() {
     while (1) {
         clearScreen();
 
-        if(isAnyBlockInLine(0)) {
+        if (isAnyBlockInLine(0)) {
             gameResultScene(score);
             return;
         }
 
         Block b = BLOCK_TEMPLATE[blockType][blockRotate];
 
-        writeScreen(0, MAP_HEIGHT + 1, fs("X : %d   \tY : %d", position.X, position.Y));
-        writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, blockRotate));
-        writeScreen(0, MAP_HEIGHT + 3, fs("%sScore: %d%s", COLOR_YELLOW, score, COLOR_RESET));
+        writeHorizontalCenter(MAP_HEIGHT + 1, fs("X : %d   \tY : %d", position.X, position.Y));
+        writeHorizontalCenter(MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, blockRotate));
+        writeHorizontalCenter(MAP_HEIGHT + 3, fs("%sScore: %d%s", COLOR_YELLOW, score, COLOR_RESET));
 
         int phaseY = position.Y;
         while (isMoveAbleWrap(position.X, phaseY + 1, blockType, blockRotate)) {
             phaseY += 1;
         }
 
-        printMap();
-        printPhaseBlock(&position, phaseY, &b);
-        printPlayerBlock(&position, &b);
+        printMap(&uiConfig);
+        printPhaseBlock(&position, phaseY, &b, &uiConfig);
+        printPlayerBlock(&position, &b, &uiConfig);
 
         if (isKeyDown(VK_LEFT)) {
             if (isMoveAbleWrap(position.X - 1, position.Y, blockType, blockRotate)) {
@@ -177,8 +183,7 @@ void mainScene() {
                 downDump = 0;
                 bottomDump = 0;
             }
-        }
-        else {
+        } else {
             downDump += 1;
         }
 
@@ -188,8 +193,7 @@ void mainScene() {
                 downDump = 0;
                 bottomDump = 0;
             }
-        }
-        else {
+        } else {
             downDump += 1;
         }
 
@@ -199,8 +203,7 @@ void mainScene() {
                 downDump = 0;
                 bottomDump = 0;
             }
-        }
-        else {
+        } else {
             downDump += 1;
         }
 
@@ -210,8 +213,7 @@ void mainScene() {
                 downDump = 0;
                 bottomDump = 0;
             }
-        }
-        else {
+        } else {
             downDump += 1;
         }
 
@@ -220,23 +222,22 @@ void mainScene() {
             readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
         }
 
-        if(downDump >= 5){
-            if(isMoveAbleWrap(position.X, position.Y + 1, blockType, blockRotate)) {
+        if (downDump >= 5) {
+            if (isMoveAbleWrap(position.X, position.Y + 1, blockType, blockRotate)) {
                 position.Y += 1;
                 downDump = 0;
-            }
-            else {
+            } else {
                 bottomDump += 1;
             }
 
-            if(bottomDump > 2) {
+            if (bottomDump > 2) {
                 playerBlockToMapBlock(position.X, position.Y, b);
                 readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
             }
         }
 
         for (int y = 0; y < MAP_HEIGHT; ++y) {
-            if(isFullLine(y)) {
+            if (isFullLine(y)) {
                 for (int i = y; i >= 1; i--) {
                     lineCopyPasse(i - 1, i);
                 }
