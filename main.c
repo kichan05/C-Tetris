@@ -84,6 +84,27 @@ void printPhaseBlock(COORD *position, int phaseY, Block *b) {
     }
 }
 
+int isFullLine(int line) {
+    for (int x = 0; x < MAP_WIDTH; x++) {
+        if(!map[line][x]){
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void lineCopyPasse(int copyLine, int pastLine) {
+    for (int x = 0; x < MAP_WIDTH; x++) {
+        map[pastLine][x] = map[copyLine][x];
+    }
+}
+
+void lineFillBlank(int line) {
+    for (int x = 0; x < MAP_WIDTH; x++) {
+        map[line][x] = 0;
+    }
+}
+
 int main() {
     srand(time(NULL));
     SetConsoleOutputCP(CP_UTF8);
@@ -143,6 +164,16 @@ int main() {
             position.Y = 0;
             blockType = randomInt(0, BLOCK_TYPE_COUNT);
             block_rotate = 0;
+        }
+
+        for (int y = 0; y < MAP_HEIGHT; ++y) {
+            if(isFullLine(y)) {
+                for (int i = y; i >= 1; i--) {
+                    lineCopyPasse(i - 1, i);
+                }
+
+                lineFillBlank(0);
+            }
         }
 
         flipScreen();
