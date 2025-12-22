@@ -23,6 +23,8 @@ void lineCopyPasse(int copyLine, int pastLine);
 void lineFillBlank(int line);
 void playerBlockToMapBlock(int x, int y, Block b);
 
+void readNextBlock(COORD* position, int* blockType, int* blockRotate, int* downDump, int* bottomDump);
+
 void mainScene();
 
 
