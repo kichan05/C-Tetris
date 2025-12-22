@@ -51,6 +51,27 @@ int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     return res;
 }
 
+void printMap(){
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            writeScreen(
+                    x, y,
+                    map[y][x] == 0 ? BLANK : fs("%s%s%s", getBlockColorCode(map[y][x]), BLOCK, COLOR_RESET)
+            );
+        }
+    }
+}
+
+void printPlayerBlock(COORD* position, Block* b) {
+    for (int y = 0; y < b->height; y++) {
+        for (int x = 0; x < b->width; x++) {
+            if (b->shape[y][x]) {
+                writeScreen(position->X + x, position->Y + y, fs("%s%s%s", getBlockColorCode(b->shape[y][x]), BLOCK, COLOR_RESET));
+            }
+        }
+    }
+}
+
 int main() {
     srand(time(NULL));
     SetConsoleOutputCP(CP_UTF8);
@@ -68,22 +89,9 @@ int main() {
         writeScreen(0, MAP_HEIGHT + 1, fs("X : %d   \tY : %d", position.X, position.Y));
         writeScreen(0, MAP_HEIGHT + 2, fs("BlockType: %d\tBlockRotate : %d", blockType, block_rotate));
 
-        for (int y = 0; y < MAP_HEIGHT; y++) {
-            for (int x = 0; x < MAP_WIDTH; x++) {
-                writeScreen(
-                        x, y,
-                        map[y][x] == 0 ? BLANK : fs("%s%s%s", getBlockColorCode(map[y][x]), BLOCK, COLOR_RESET)
-                );
-            }
-        }
+        printMap();
+        printPlayerBlock(&position, &b);
 
-        for (int y = 0; y < b.height; y++) {
-            for (int x = 0; x < b.width; x++) {
-                if (b.shape[y][x]) {
-                    writeScreen(position.X + x, position.Y + y, fs("%s%s%s", getBlockColorCode(b.shape[y][x]), BLOCK, COLOR_RESET));
-                }
-            }
-        }
 
         if (isKeyDown(VK_LEFT)) {
             if (isMoveAbleWrap(position.X - 1, position.Y, blockType, block_rotate)) {
