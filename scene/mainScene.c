@@ -187,11 +187,12 @@ void lineFillBlank(int line) {
     }
 }
 
-void readNextBlock(COORD *position, int *blockType, int *blockRotate, int *downDump, int *bottomDump) {
+void readNextBlock(COORD* position, int* blockType, int* blockRotate, int* downDump, int* bottomDump, CircularQueue* nextBlockQueue) {
     position->X = MAP_WIDTH / 2;
     position->Y = 0;
 
-    *blockType = randomInt(0, BLOCK_TYPE_COUNT);
+    *blockType = dequeue(nextBlockQueue);
+    enqueue(nextBlockQueue, randomInt(0, BLOCK_TYPE_COUNT));
     *blockRotate = 0;
     *downDump = 0;
     *bottomDump = 0;
@@ -223,7 +224,7 @@ void mainScene() {
     int bottomDump = 0;
     int holdBlockType = -1;
 
-    readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
+    readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump, &nextBlockQueue);
 
     while (1) {
         clearScreen();
@@ -293,7 +294,7 @@ void mainScene() {
 
         if (isKeyDowned(VK_SPACE)) {
             playerBlockToMapBlock(position.X, phaseY, b);
-            readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
+            readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump, &nextBlockQueue);
         }
 
         if (isKeyDowned('C')) {
@@ -325,7 +326,7 @@ void mainScene() {
 
             if (bottomDump > 2) {
                 playerBlockToMapBlock(position.X, position.Y, b);
-                readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
+                readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump, &nextBlockQueue);
             }
         }
 
