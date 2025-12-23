@@ -54,6 +54,20 @@ int isMoveAbleWrap(int x, int y, int blockType, int blockRotate) {
     return res;
 }
 
+void _printBlock(int anchorX, int anchorY, Block *b) {
+    for (int y = 0; y < b->height; y++) {
+        for (int x = 0; x < b->width; x++) {
+            if (b->shape[y][x]) {
+                writeScreen(
+                        anchorX + x,
+                        anchorY + y,
+                        fs("%s%s%s", getBlockColorCode(b->shape[y][x]), BLOCK, COLOR_RESET)
+                );
+            }
+        }
+    }
+}
+
 void printMap(UiConfig *uiConfig) {
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
@@ -66,15 +80,10 @@ void printMap(UiConfig *uiConfig) {
 }
 
 void printPlayerBlock(COORD *position, Block *b, UiConfig *uiConfig) {
-
-    for (int y = 0; y < b->height; y++) {
-        for (int x = 0; x < b->width; x++) {
-            if (b->shape[y][x]) {
-                writeScreen(position->X + x + uiConfig->leftPadding, position->Y + y,
-                            fs("%s%s%s", getBlockColorCode(b->shape[y][x]), BLOCK, COLOR_RESET));
-            }
-        }
-    }
+    _printBlock(
+            position->X + uiConfig->leftPadding,
+            position->Y,
+            b);
 }
 
 void printPhaseBlock(COORD *position, int phaseY, Block *b, UiConfig *uiConfig) {
@@ -96,7 +105,7 @@ void printHoldBlock(int holdBlockType, UiConfig *uiConfig) {
     writeScreen(anchorX, 0, fs("%s%s%s", COLOR_GREEN, title, COLOR_RESET));
 
     if (holdBlockType == -1) {
-        char* message = "Press C, hold block";
+        char *message = "Press C, hold block";
         int messageLen = strlen(message);
 
         writeScreen(anchorX + titleLen - messageLen, 2, fs("%s%s%s", COLOR_ORANGE, message, COLOR_RESET));
@@ -105,34 +114,19 @@ void printHoldBlock(int holdBlockType, UiConfig *uiConfig) {
 
     Block b = BLOCK_TEMPLATE[holdBlockType][0];
     int blockPadding = (titleLen - b.width) / 2;
-
-    for (int y = 0; y < b.height; y++) {
-        for (int x = 0; x < b.width; x++) {
-            if (b.shape[y][x]) {
-                writeScreen(
-                        anchorX + blockPadding + x,
-                        2 + y,
-                        fs("%s%s%s", getBlockColorCode(b.shape[y][x]), BLOCK, COLOR_RESET)
-                );
-            }
-        }
-    }
+    _printBlock(anchorX + blockPadding, 2, (Block *) (BLOCK_TEMPLATE + holdBlockType + 0));
 }
 
-void printNextBlockList(CircularQueue* nextBlockQueue, UiConfig* uiConfig) {
+void printNextBlockList(CircularQueue *nextBlockQueue, UiConfig *uiConfig) {
     int anchorX = uiConfig->leftPadding + MAP_WIDTH + 1;
     writeScreen(anchorX, 0, "Next Block");
     for (int i = 0; i < NEXT_BLOCK_QUEUE_SIZE; ++i) {
-        Block b = BLOCK_TEMPLATE[getValueOfIndex(nextBlockQueue, i)][0];
-
-        for (int y = 0; y < b.height; y++) {
-            for (int x = 0; x < b.width; x++) {
-                if (b.shape[y][x]) {
-                    writeScreen(anchorX + x, 2 + 5 * i + y,
-                                fs("%s%s%s", getBlockColorCode(b.shape[y][x]), BLOCK, COLOR_RESET));
-                }
-            }
-        }
+        int holdBlockType = getValueOfIndex(nextBlockQueue, i);
+        _printBlock(
+                anchorX + 3,
+                2 + 5 * i,
+                (Block *) (BLOCK_TEMPLATE + holdBlockType + 0)
+        );
     }
 }
 
@@ -187,7 +181,8 @@ void lineFillBlank(int line) {
     }
 }
 
-void readyNextBlock(COORD* position, int* blockType, int* blockRotate, int* downDump, int* bottomDump, CircularQueue* nextBlockQueue) {
+void readyNextBlock(COORD *position, int *blockType, int *blockRotate, int *downDump, int *bottomDump,
+                    CircularQueue *nextBlockQueue) {
     position->X = MAP_WIDTH / 2;
     position->Y = 0;
 

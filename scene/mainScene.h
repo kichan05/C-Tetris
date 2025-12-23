@@ -19,6 +19,8 @@ void initMap();
 int isMoveAble(int x, int y, int blockType, int blockRotate);
 int isMoveAbleWrap(int x, int y, int blockType, int blockRotate);
 
+void _printBlock(int anchorX, int anchorY, Block* b);
+
 void printMap(UiConfig *uiConfig);
 void printPlayerBlock(COORD *position, Block *b, UiConfig *uiConfig);
 void printPhaseBlock(COORD *position, int phaseY, Block *b, UiConfig *uiConfig);
