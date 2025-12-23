@@ -12,6 +12,7 @@
 #include "../block.h"
 #include "./gameResultScene.h"
 #include "./../uiConfig.h"
+#include "./../CircularQueue.h"
 
 void initMap();
 

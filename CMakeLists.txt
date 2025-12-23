@@ -23,4 +23,6 @@ add_executable(C_Tetris main.c
         scene/gameResultScene.h
         uiConfig.c
         uiConfig.h
+        CircularQueue.c
+        CircularQueue.h
 )

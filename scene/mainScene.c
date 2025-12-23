@@ -188,6 +188,17 @@ void mainScene() {
     };
 
     COORD position = {0, 0};
+
+    CircularQueue nextBlockQueue = {
+            0,
+            0,
+            0,
+    };
+
+    for (int i = 0; i < NEXT_BLOCK_QUEUE_SIZE; ++i) {
+        enqueue(&nextBlockQueue, randomInt(0, BLOCK_TYPE_COUNT));
+    }
+
     int score = 0;
     int blockRotate = 0;
     int blockType = 0;
