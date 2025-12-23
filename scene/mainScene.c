@@ -88,7 +88,38 @@ void printPhaseBlock(COORD *position, int phaseY, Block *b, UiConfig *uiConfig) 
     }
 }
 
-void printMapBoard(UiConfig* uiConfig) {
+void printHoldBlock(int holdBlockType, UiConfig *uiConfig) {
+    int anchorX = uiConfig->leftPadding - 1 - 15;
+
+    char *title = "Hold Block";
+    int titleLen = strlen(title);
+    writeScreen(anchorX, 0, fs("%s%s%s", COLOR_GREEN, title, COLOR_RESET));
+
+    if (holdBlockType == -1) {
+        char* message = "Press C, hold block";
+        int messageLen = strlen(message);
+
+        writeScreen(anchorX + titleLen - messageLen, 2, fs("%s%s%s", COLOR_ORANGE, message, COLOR_RESET));
+        return;
+    }
+
+    Block b = BLOCK_TEMPLATE[holdBlockType][0];
+    int blockPadding = (titleLen - b.width) / 2;
+
+    for (int y = 0; y < b.height; y++) {
+        for (int x = 0; x < b.width; x++) {
+            if (b.shape[y][x]) {
+                writeScreen(
+                        anchorX + blockPadding + x,
+                        2 + y,
+                        fs("%s%s%s", getBlockColorCode(b.shape[y][x]), BLOCK, COLOR_RESET)
+                );
+            }
+        }
+    }
+}
+
+void printMapBoard(UiConfig *uiConfig) {
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         writeScreen(uiConfig->leftPadding - 1, y, BLOCK);
         writeScreen(uiConfig->leftPadding + MAP_WIDTH, y, BLOCK);
@@ -162,6 +193,7 @@ void mainScene() {
     int blockType = 0;
     int downDump = 0;
     int bottomDump = 0;
+    int holdBlockType = -1;
 
     readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
 
@@ -187,6 +219,7 @@ void mainScene() {
         printMapBoard(&uiConfig);
         printMap(&uiConfig);
         printPhaseBlock(&position, phaseY, &b, &uiConfig);
+        printHoldBlock(holdBlockType, &uiConfig);
         printPlayerBlock(&position, &b, &uiConfig);
 
         if (isKeyDown(VK_LEFT)) {
@@ -233,6 +266,25 @@ void mainScene() {
             playerBlockToMapBlock(position.X, phaseY, b);
             readNextBlock(&position, &blockType, &blockRotate, &downDump, &bottomDump);
         }
+
+        if (isKeyDowned('C')) {
+            position.X = MAP_WIDTH / 2;
+            position.Y = 0;
+
+            if (holdBlockType == -1) {
+                holdBlockType = blockType;
+                blockType = randomInt(0, BLOCK_TYPE_COUNT);
+            } else {
+                int temp = blockType;
+                blockType = holdBlockType;
+                holdBlockType = temp;
+            }
+
+            blockRotate = 0;
+            downDump = 0;
+            bottomDump = 0;
+        }
+
 
         if (downDump >= 5) {
             if (isMoveAbleWrap(position.X, position.Y + 1, blockType, blockRotate)) {
