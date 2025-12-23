@@ -23,6 +23,7 @@ void printMap(UiConfig *uiConfig);
 void printPlayerBlock(COORD *position, Block *b, UiConfig *uiConfig);
 void printPhaseBlock(COORD *position, int phaseY, Block *b, UiConfig *uiConfig);
 void printHoldBlock(int holdBlockType, UiConfig* uiConfig);
+void printNextBlockList(CircularQueue* nextBlockQueue, UiConfig* uiConfig);
 void printMapBoard(UiConfig* uiConfig);
 
 int isFullLine(int line);

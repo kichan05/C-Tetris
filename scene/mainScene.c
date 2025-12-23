@@ -119,6 +119,23 @@ void printHoldBlock(int holdBlockType, UiConfig *uiConfig) {
     }
 }
 
+void printNextBlockList(CircularQueue* nextBlockQueue, UiConfig* uiConfig) {
+    int anchorX = uiConfig->leftPadding + MAP_WIDTH + 1;
+    writeScreen(anchorX, 0, "Next Block");
+    for (int i = 0; i < NEXT_BLOCK_QUEUE_SIZE; ++i) {
+        Block b = BLOCK_TEMPLATE[getValueOfIndex(nextBlockQueue, i)][0];
+
+        for (int y = 0; y < b.height; y++) {
+            for (int x = 0; x < b.width; x++) {
+                if (b.shape[y][x]) {
+                    writeScreen(anchorX + x, 2 + 5 * i + y,
+                                fs("%s%s%s", getBlockColorCode(b.shape[y][x]), BLOCK, COLOR_RESET));
+                }
+            }
+        }
+    }
+}
+
 void printMapBoard(UiConfig *uiConfig) {
     for (int y = 0; y < MAP_HEIGHT; ++y) {
         writeScreen(uiConfig->leftPadding - 1, y, BLOCK);
@@ -231,6 +248,7 @@ void mainScene() {
         printMap(&uiConfig);
         printPhaseBlock(&position, phaseY, &b, &uiConfig);
         printHoldBlock(holdBlockType, &uiConfig);
+        printNextBlockList(&nextBlockQueue, &uiConfig);
         printPlayerBlock(&position, &b, &uiConfig);
 
         if (isKeyDown(VK_LEFT)) {
