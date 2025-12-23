@@ -34,7 +34,7 @@ void lineCopyPaste(int copyLine, int pasteLine);
 void lineFillBlank(int line);
 void playerBlockToMapBlock(int x, int y, Block b);
 
-void readNextBlock(COORD* position, int* blockType, int* blockRotate, int* downDump, int* bottomDump, CircularQueue* nextBlockQueue);
+void readyNextBlock(COORD* position, int* blockType, int* blockRotate, int* downDump, int* bottomDump, CircularQueue* nextBlockQueue);
 
 void mainScene();
 
