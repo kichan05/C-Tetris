@@ -175,9 +175,9 @@ void playerBlockToMapBlock(int x, int y, Block b) {
     }
 }
 
-void lineCopyPasse(int copyLine, int pastLine) {
+void lineCopyPaste(int copyLine, int pasteLine) {
     for (int x = 0; x < MAP_WIDTH; x++) {
-        map[pastLine][x] = map[copyLine][x];
+        map[pasteLine][x] = map[copyLine][x];
     }
 }
 
@@ -333,7 +333,7 @@ void mainScene() {
         for (int y = 0; y < MAP_HEIGHT; ++y) {
             if (isFullLine(y)) {
                 for (int i = y; i >= 1; i--) {
-                    lineCopyPasse(i - 1, i);
+                    lineCopyPaste(i - 1, i);
                 }
 
                 lineFillBlank(0);

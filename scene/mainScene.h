@@ -30,7 +30,7 @@ int isFullLine(int line);
 int isAnyBlockInLine(int line);
 
 
-void lineCopyPasse(int copyLine, int pastLine);
+void lineCopyPaste(int copyLine, int pasteLine);
 void lineFillBlank(int line);
 void playerBlockToMapBlock(int x, int y, Block b);
 
